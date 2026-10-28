@@ -1,0 +1,50 @@
+# dependencies (bun install)
+node_modules
+
+# output
+out
+dist
+*.tgz
+
+# code coverage
+coverage
+*.lcov
+
+# logs
+logs
+_.log
+report.[0-9]_.[0-9]_.[0-9]_.[0-9]_.json
+
+# local registry / auth settings
+.npmrc
+
+# dotenv environment variable files
+.env
+.env.development.local
+.env.test.local
+.env.production.local
+.env.local
+
+# caches
+.eslintcache
+.cache
+*.tsbuildinfo
+
+# IntelliJ based IDEs
+.idea
+
+# Finder (MacOS) folder config
+.DS_Store
+
+# TODO
+TODO.md
+.scratch/
+
+# Claude Code personal settings
+.claude/
+.mcp.json
+
+# docs site
+site/build
+site/.svelte-kit
+site/node_modules

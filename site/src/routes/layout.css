@@ -1,0 +1,69 @@
+@import 'tailwindcss';
+@plugin '@tailwindcss/forms';
+@plugin '@tailwindcss/typography';
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+	/* brand: indigo. --color-brand is for text and borders (lightened in dark mode);
+	   --color-brand-solid is for filled surfaces that carry white text */
+	--color-brand: #4f46e5;
+	--color-brand-soft: #6366f1;
+	--color-brand-solid: #4f46e5;
+	--color-brand-solid-hover: #4338ca;
+
+	/* VitePress-adjacent neutrals, light */
+	--color-vp-bg: #ffffff;
+	--color-vp-bg-soft: #f6f6f7;
+	--color-vp-bg-mute: #ececee;
+	--color-vp-fg: #3c3c43;
+	--color-vp-fg-strong: #213547;
+	--color-vp-fg-muted: #67676c;
+	--color-vp-divider: #e2e2e3;
+
+	/* dark */
+	--color-vpd-bg: #1b1b1f;
+	--color-vpd-bg-soft: #161618;
+	--color-vpd-bg-mute: #202127;
+	--color-vpd-fg: #dfdfd6;
+	--color-vpd-fg-muted: #98989f;
+	--color-vpd-divider: #2e2e32;
+}
+
+.dark {
+	--color-brand: #a5b4fc;
+	--color-brand-soft: #c7d2fe;
+}
+
+/* ---- shiki dual themes (defaultColor: false emits both as variables) ---- */
+.shiki,
+.shiki span {
+	color: var(--shiki-light);
+	background-color: transparent !important;
+}
+.dark .shiki,
+.dark .shiki span {
+	color: var(--shiki-dark);
+}
+
+/* ---- markdown content ---- */
+.docs-prose {
+	@apply prose max-w-none prose-slate dark:prose-invert;
+	@apply prose-headings:scroll-mt-24 prose-headings:font-semibold;
+	@apply prose-h1:text-3xl prose-h1:tracking-tight;
+	@apply prose-h2:mt-12 prose-h2:border-t prose-h2:border-vp-divider prose-h2:pt-8 prose-h2:text-2xl dark:prose-h2:border-vpd-divider;
+	@apply prose-a:font-medium prose-a:text-brand prose-a:no-underline hover:prose-a:underline;
+	@apply prose-code:rounded prose-code:bg-vp-bg-mute prose-code:px-1.5 prose-code:py-0.5 prose-code:text-[0.875em] prose-code:font-normal prose-code:before:content-none prose-code:after:content-none dark:prose-code:bg-vpd-bg-mute;
+	@apply prose-table:text-sm;
+}
+
+.docs-prose pre {
+	@apply my-5 overflow-x-auto rounded-lg border border-vp-divider bg-vp-bg-soft p-4 text-[13px] leading-6 dark:border-vpd-divider dark:bg-vpd-bg-soft;
+}
+.docs-prose pre code {
+	@apply bg-transparent p-0;
+}
+/* a wide table scrolls on its own instead of widening the whole page on a phone */
+.docs-prose table {
+	@apply block max-w-full overflow-x-auto;
+}

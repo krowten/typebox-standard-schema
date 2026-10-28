@@ -1,0 +1,38 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "jsx": "react-jsx",
+    // Environment setup & latest features
+    "lib": ["ESNext"],
+    "moduleDetection": "force",
+    "module": "Preserve",
+
+    // Bundler mode
+    "moduleResolution": "bundler",
+    // TypeScript 6+ no longer loads every @types package by default.
+    "types": ["bun"],
+    "allowImportingTsExtensions": true,
+
+    "allowJs": true,
+    // Best practices
+    "strict": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitOverride": true,
+
+    "noPropertyAccessFromIndexSignature": false,
+    "noUncheckedIndexedAccess": true,
+    // Some stricter flags (disabled by default)
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "noEmit": true,
+    "verbatimModuleSyntax": true,
+    "skipLibCheck": true
+  },
+  // Without an exclude, tsc picks up dist/index.d.mts from a previous build —
+  // its bundled `declare module 'typebox'` merges with src/augment.ts and any
+  // drift between the two becomes a phantom TS2717 in a clean working tree.
+  // test/dist-consumer is excluded for the same reason: it imports the built
+  // package by name, which drags dist/index.d.mts back in. It has its own
+  // tsconfig and runs under `bun run check:dist`.
+  "exclude": ["dist", "node_modules", ".scratch", "test/dist-consumer", "site"]
+}

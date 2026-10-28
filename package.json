@@ -1,0 +1,95 @@
+{
+  "name": "typebox-standard-schema",
+  "type": "module",
+  "version": "0.1.0",
+  "description": "Standard Schema and Standard JSON Schema for TypeBox 1.x, with readOnly/writeOnly request and response projections",
+  "author": {
+    "name": "krowten",
+    "email": "me@krowten.dev",
+    "url": "https://github.com/krowten"
+  },
+  "license": "MIT",
+  "homepage": "https://krowten.github.io/typebox-standard-schema/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/krowten/typebox-standard-schema.git"
+  },
+  "bugs": {
+    "url": "https://github.com/krowten/typebox-standard-schema/issues"
+  },
+  "keywords": [
+    "typebox",
+    "standard-schema",
+    "standard-json-schema",
+    "json-schema",
+    "typescript",
+    "validation",
+    "schema-validation",
+    "validator",
+    "openapi",
+    "trpc",
+    "hono",
+    "elysia",
+    "tanstack-form",
+    "react-hook-form",
+    "sveltekit",
+    "mcp",
+    "readonly",
+    "writeonly",
+    "dto",
+    "coercion"
+  ],
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.mts",
+      "default": "./dist/index.mjs"
+    },
+    "./package.json": "./package.json"
+  },
+  "main": "./dist/index.mjs",
+  "types": "./dist/index.d.mts",
+  "files": [
+    "dist"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "build": "tsdown src/index.ts --dts",
+    "check": "tsc --noEmit",
+    "check:dist": "bun run build && tsc -p test/dist-consumer/tsconfig.json",
+    "test": "bun run test:unit && bun run test:dist && bun run test:fuzz",
+    "test:unit": "bun test",
+    "test:dist": "bun run check:dist",
+    "test:fuzz": "bun run test/fuzz/run.ts",
+    "site:dev": "bun run --cwd site dev",
+    "site:build": "bun run --cwd site build",
+    "lint": "eslint",
+    "lint:fix": "eslint --fix",
+    "prepublishOnly": "bun run lint && bun run check && bun test && bun run build && bunx publint && grep -q \"declare module 'typebox'\" dist/index.d.mts && tsc -p test/dist-consumer/tsconfig.json"
+  },
+  "peerDependencies": {
+    "typescript": ">=5"
+  },
+  "peerDependenciesMeta": {
+    "typescript": {
+      "optional": true
+    }
+  },
+  "dependencies": {
+    "typebox": "^1.4.3"
+  },
+  "devDependencies": {
+    "@antfu/eslint-config": "^10.0.0",
+    "@standard-schema/spec": "^1.1.0",
+    "@types/bun": "^1.4.4",
+    "ajv": "^8.20.0",
+    "ajv-formats": "^3.0.1",
+    "eslint": "^10.13.0",
+    "expect-type": "^1.4.0",
+    "jiti": "^2.7.0",
+    "tsdown": "^0.23.3",
+    "typescript": "^6.0.3"
+  }
+}

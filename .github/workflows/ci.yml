@@ -1,0 +1,30 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: oven-sh/setup-bun@v2
+      - run: bun install --frozen-lockfile
+      - run: bun run lint
+      - run: bun run check
+      - run: bun test
+      - run: bun run build
+      # Packaging health: exports/types layout, and the augmentation must
+      # survive the declaration rollup — without it consumers lose ~standard
+      # typing entirely.
+      - run: bunx publint
+      - run: grep -q "declare module 'typebox'" dist/index.d.mts
+      # The augmentation surviving is necessary but not sufficient: this
+      # compiles a consumer against the freshly built dist/ and asserts that
+      # StandardSchemaV1.InferInput/InferOutput still resolve to real shapes.
+      - run: bunx tsc -p test/dist-consumer/tsconfig.json

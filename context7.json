@@ -1,0 +1,23 @@
+{
+  "$schema": "https://context7.com/schema/context7.json",
+  "projectTitle": "typebox-standard-schema",
+  "description": "Standard Schema and Standard JSON Schema for TypeBox 1.x: every schema built with Type works directly in tRPC, Hono, Elysia, TanStack Form, React Hook Form and SvelteKit, with readOnly/writeOnly projections that derive request and response schemas from one source.",
+  "folders": ["site/src/routes/(docs)"],
+  "excludeFiles": [
+    "CHANGELOG.md",
+    "CLAUDE.md",
+    "CODE_OF_CONDUCT.md",
+    "CONTRIBUTING.md",
+    "SECURITY.md",
+    "LICENSE"
+  ],
+  "rules": [
+    "Import Type, validate and everything else from 'typebox-standard-schema', never from 'typebox' or '@sinclair/typebox': schemas built by another TypeBox copy have no ~standard.",
+    "The package brings TypeBox 1.x as its own dependency; don't install typebox separately. A schema built elsewhere (for example by drizzle-typebox on @sinclair/typebox 0.34) is brought in with adopt(schema).",
+    "Every schema built with Type is a Standard Schema: pass it straight to tRPC, Hono, TanStack Form and the like, with no adapter or compile step.",
+    "Mark fields with Type.Readonly / Type.Writeonly and derive the request and response schemas with Type.Write(schema) / Type.Read(schema).",
+    "Recursive types use Type.Cyclic; compose schemas by nesting the schema objects, not with $ref or a registry.",
+    "validate() converts strings only, by Ajv's coerceTypes rules (numeric strings, 'true'/'false', '' for null, a lone string for an array), applies defaults, and never mutates its input.",
+    "For JSON Schema or OpenAPI use schema['~standard'].jsonSchema.input({ target }) or .output({ target }) with 'draft-2020-12', 'draft-07' or 'openapi-3.0'."
+  ]
+}

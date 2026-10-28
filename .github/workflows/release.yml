@@ -1,0 +1,41 @@
+# Stages a release on npm when a `v*` tag is pushed; the maintainer then approves it on npmjs.com
+# (Staged Packages) with 2FA, so nothing goes live from CI alone. Provenance ("Built and signed on
+# GitHub Actions") is signed here: only a CI run of a public repository can produce it.
+#
+# Authentication: npm cannot set up trusted publishing for a package that does not exist yet, so
+# the first release uses a granular token in the NPM_TOKEN secret (stage-only, no 2FA bypass,
+# shortest expiry). Once the package exists, trusted publishing (stage only) replaces it and the
+# token and the secret are deleted; an empty NODE_AUTH_TOKEN then leaves npm to OIDC.
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: read
+  id-token: write # signs the provenance statement, and authenticates trusted publishing
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+      - uses: oven-sh/setup-bun@v2
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          registry-url: https://registry.npmjs.org
+      # `npm stage` needs npm 11.15 or later, newer than some Node 24 releases bundle
+      - run: npm install --global npm@^11.15
+      # The tag is the trigger, not the version: npm publishes whatever package.json says. Refuse
+      # a mismatch instead of staging a number nobody meant.
+      - name: Check the tag matches package.json
+        run: test "v$(node -p 'require("./package.json").version')" = "$GITHUB_REF_NAME"
+      - run: bun install --frozen-lockfile
+      # The tag may point at a commit CI never ran on: prepublishOnly runs the whole gate (lint,
+      # typecheck, tests, build, publint, the dist consumer) before anything is staged.
+      - run: npm stage publish --provenance --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }} # first release only, see the top of this file
